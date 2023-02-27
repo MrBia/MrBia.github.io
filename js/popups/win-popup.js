@@ -7,7 +7,7 @@ class WinPopup extends Popup {
 
     initElements() {
         this._panel = new Panel(this._scene, this._x, this._y);
-        this._title = this._scene.add.text(this._panel.position().x - 55 * 2, this._panel.position().y - this._panel.size().y * 0.37, 'VOUS GAGNEZ', { fontFamily: 'molot', fontSize: 55, color: 'red' });
+        this._title = this._scene.add.text(this._panel.position().x - 45 * 2, this._panel.position().y - this._panel.size().y * 0.37, 'Bien joué!', { fontFamily: 'molot', fontSize: 55, color: 'red' });
         this._btnHome = new HomeButton(this._scene, this._panel.position().x, this._panel.position().y + 160, this);
         this._btnNextLevel = new NextLevelButton(this._scene, this._panel.position().x + 110, this._panel.position().y + 160, this);
         this._btnReplay = new ReplayButton(this._scene, this._panel.position().x - 110, this._panel.position().y + 160, this);

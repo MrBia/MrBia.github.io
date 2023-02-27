@@ -15,6 +15,8 @@ class GameController extends Phaser.Scene {
 
     create() {
         this.background = new Background(this, this.width / 2, this.height / 2);
+        this.logo = new Logo(this, this.width / 2 + 50, this.height / 5);
+        this.logo.setScale(0.15, 0.15);
 
         this.initButtons();
         this.initSnowEffect();

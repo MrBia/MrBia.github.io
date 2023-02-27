@@ -16,7 +16,7 @@ class PreLoader extends Phaser.Scene{
         this.load.spritesheet('spritesheet_loading_frame', 'assets/loading-bar.png', {frameWidth: 200, frameHeight: 5});
 
         // ========= LOADING TITLE =========
-        this.load.spritesheet('spritesheet_title', 'assets/title.png', {frameWidth: 474, frameHeight: 362});
+        this.load.spritesheet('spritesheet_title', 'assets/title.png', {frameWidth: 619, frameHeight: 457});
 
         // ========= LOADING LOGO =========
         this.load.spritesheet('spritesheet_white_bg', 'assets/white-background.png', {frameWidth: 720, frameHeight: 1080});
