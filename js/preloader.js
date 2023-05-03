@@ -5,68 +5,78 @@ class PreLoader extends Phaser.Scene{
 
     preload() {
         // this.load.image
-        this.load.spritesheet('spritesheet_background', 'assets/images/background.png', {frameWidth: 720, frameHeight: 1080});
+        this.load.spritesheet('spritesheet_background', 'assets/images/background.png', {frameWidth: 1280, frameHeight: 720});
         
         // ========= LOADING AUDIO =========
         this.load.audio('bgm', ['assets/audio/bgm.mp3']);
         this.load.audio('button', ['assets/audio/button.mp3']);
-        this.load.audio('clickTube', ['assets/audio/click-tube.mp3']);
+        this.load.audio('itemEffect', ['assets/audio/item-effect.mp3']);
+        this.load.audio('tick', ['assets/audio/tick.mp3']);
+        this.load.audio('spinningreel', ['assets/audio/spinning-reel.mp3']);
+        this.load.audio('donespin', ['assets/audio/done-spin.mp3']);
 
         // ========= LOADING BAR   =========
         this.load.spritesheet('spritesheet_loading_frame', 'assets/loading-bar.png', {frameWidth: 200, frameHeight: 5});
 
         // ========= LOADING TITLE =========
-        this.load.spritesheet('spritesheet_title', 'assets/title.png', {frameWidth: 619, frameHeight: 457});
-
-        // ========= LOADING LOGO =========
-        this.load.spritesheet('spritesheet_white_bg', 'assets/white-background.png', {frameWidth: 720, frameHeight: 1080});
-        this.load.spritesheet('spritesheet_logo', 'assets/seeva-logo.png', {frameWidth: 3576, frameHeight: 2520});
-
-        // ========= LOADING COINS =========
-        this.load.spritesheet('spritesheet_iconcoins', 'assets/icon-coin.png', {frameWidth: 94, frameHeight: 94});
-        this.load.spritesheet('spritesheet_iconselected', 'assets/selected-icon.png', {frameWidth: 49, frameHeight: 48});
+        this.load.spritesheet('spritesheet_title', 'assets/title.png', {frameWidth: 585, frameHeight: 400});
 
         // ========= LOADING BUTTONS =========
         this.load.spritesheet('spritesheet_basebutton', 'assets/buttons/base-button.png', {frameWidth: 116, frameHeight: 116});
-        this.load.spritesheet('spritesheet_playbutton', 'assets/buttons/play-button.png', {frameWidth: 199, frameHeight: 136});
-        this.load.spritesheet('spritesheet_homebutton', 'assets/buttons/home-button.png', {frameWidth: 182, frameHeight: 120});
+        this.load.spritesheet('spritesheet_playbutton', 'assets/buttons/play-button.png', {frameWidth: 527, frameHeight: 199});
+        this.load.spritesheet('spritesheet_homebutton', 'assets/buttons/home-button.png', {frameWidth: 239, frameHeight: 234});
         this.load.spritesheet('spritesheet_replaybutton', 'assets/buttons/replay-button.png', {frameWidth: 199, frameHeight: 136});
-        this.load.spritesheet('spritesheet_pausebutton', 'assets/buttons/pause-button.png', {frameWidth: 199, frameHeight: 136});
+        //this.load.spritesheet('spritesheet_settingsbutton', 'assets/buttons/setting-button.png', {frameWidth: 125, frameHeight: 133});
+        this.load.spritesheet('spritesheet_pausebutton', 'assets/buttons/pause-button.png', {frameWidth: 239, frameHeight: 234});
         this.load.spritesheet('spritesheet_nextlevelbutton', 'assets/buttons/nextlevel-button.png', {frameWidth: 199, frameHeight: 136});
-        this.load.spritesheet('spritesheet_soundbutton', 'assets/buttons/sound-button.png', {frameWidth: 480 / 2, frameHeight: 120});
+        this.load.spritesheet('spritesheet_soundbutton', 'assets/buttons/sound-button.png', {frameWidth: 478 / 2, frameHeight: 234});
         this.load.spritesheet('spritesheet_continuebutton', 'assets/buttons/continue-button.png', {frameWidth: 199, frameHeight: 136});
         this.load.spritesheet('spritesheet_shopbutton', 'assets/buttons/shop-button.png', {frameWidth: 182, frameHeight: 120});
-        
-        // ========= LOADING TUBES =========
-        this.load.spritesheet('spritesheet_tube1', 'assets/tubes/tube-1.png', {frameWidth: 54, frameHeight: 164});
-        this.load.spritesheet('spritesheet_tube2', 'assets/tubes/tube-2.png', {frameWidth: 54, frameHeight: 164});
-        this.load.spritesheet('spritesheet_tube3', 'assets/tubes/tube-3.png', {frameWidth: 54, frameHeight: 164});
-        this.load.spritesheet('spritesheet_tube4', 'assets/tubes/tube-4.png', {frameWidth: 54, frameHeight: 164});
-        this.load.spritesheet('spritesheet_tube5', 'assets/tubes/tube-5.png', {frameWidth: 54, frameHeight: 164});
-        this.load.spritesheet('spritesheet_tube6', 'assets/tubes/tube-6.png', {frameWidth: 54, frameHeight: 164});
-    
-        // ========= LOADING BALLS =========
-        this.load.spritesheet('spritesheet_darkgreen', 'assets/balls/dark-green.png', {frameWidth: 150, frameHeight: 150});
-        this.load.spritesheet('spritesheet_gray', 'assets/balls/gray.png', {frameWidth: 150, frameHeight: 150});
-        this.load.spritesheet('spritesheet_green', 'assets/balls/green.png', {frameWidth: 150, frameHeight: 150});
-        this.load.spritesheet('spritesheet_orange', 'assets/balls/orange.png', {frameWidth: 150, frameHeight: 150});
-        this.load.spritesheet('spritesheet_pink', 'assets/balls/pink.png', {frameWidth: 150, frameHeight: 150});
-        this.load.spritesheet('spritesheet_purple', 'assets/balls/purple.png', {frameWidth: 150, frameHeight: 150});
-        this.load.spritesheet('spritesheet_red', 'assets/balls/red.png', {frameWidth: 150, frameHeight: 150});
-        this.load.spritesheet('spritesheet_seablue', 'assets/balls/sea-blue.png', {frameWidth: 150, frameHeight: 150});
-        this.load.spritesheet('spritesheet_skyblue', 'assets/balls/sky-blue.png', {frameWidth: 150, frameHeight: 150});
-        this.load.spritesheet('spritesheet_yellow', 'assets/balls/yellow.png', {frameWidth: 150, frameHeight: 150});
-    
+
         // ========= LOADING PANEL =========
-        this.load.spritesheet('spritesheet_panel', 'assets/popup-panel.png', {frameWidth: 500, frameHeight: 610});
+        this.load.spritesheet('spritesheet_panel', 'assets/popup-panel.png', {frameWidth: 335, frameHeight: 387});
+    
+        this.loadImage();
+    }
 
+    loadImage() {
+        this.load.spritesheet('spritesheet_wheel_panel', 'assets/images/spins/wheel.png', {frameWidth: 900, frameHeight: 900});
+        this.load.spritesheet('spritesheet_item1', 'assets/images/spins/item1.png', {frameWidth: 900, frameHeight: 900});
+        this.load.spritesheet('spritesheet_item2', 'assets/images/spins/item2.png', {frameWidth: 900, frameHeight: 900});
+        this.load.spritesheet('spritesheet_item3', 'assets/images/spins/item3.png', {frameWidth: 900, frameHeight: 900});
+        this.load.spritesheet('spritesheet_item4', 'assets/images/spins/item4.png', {frameWidth: 900, frameHeight: 900});
+        this.load.spritesheet('spritesheet_item5', 'assets/images/spins/item5.png', {frameWidth: 900, frameHeight: 900});
+        this.load.spritesheet('spritesheet_item6', 'assets/images/spins/item6.png', {frameWidth: 900, frameHeight: 900});
+        this.load.spritesheet('spritesheet_item7', 'assets/images/spins/item7.png', {frameWidth: 900, frameHeight: 900});
+        this.load.spritesheet('spritesheet_item8', 'assets/images/spins/item8.png', {frameWidth: 900, frameHeight: 900});
+        this.load.spritesheet('spritesheet_item9', 'assets/images/spins/item9.png', {frameWidth: 900, frameHeight: 900});
+        this.load.spritesheet('spritesheet_item10', 'assets/images/spins/item10.png', {frameWidth: 900, frameHeight: 900});
+        this.load.spritesheet('spritesheet_item11', 'assets/images/spins/item11.png', {frameWidth: 900, frameHeight: 900});
+        this.load.spritesheet('spritesheet_item12', 'assets/images/spins/item12.png', {frameWidth: 900, frameHeight: 900});
+        this.load.spritesheet('spritesheet_winitem', 'assets/images/spins/win-item.png', {frameWidth: 900, frameHeight: 900});
+        this.load.spritesheet('spritesheet_spin_button', 'assets/images/spins/spin.png', {frameWidth: 149, frameHeight: 219});
+        this.load.spritesheet('spritesheet_plus_button', 'assets/buttons/plus-button.png', {frameWidth: 239, frameHeight: 234});
+        this.load.spritesheet('spritesheet_sub_button', 'assets/buttons/sub-button.png', {frameWidth: 239, frameHeight: 234});
+        this.load.spritesheet('spritesheet_frame_price', 'assets/images/frame-price.png', {frameWidth: 185, frameHeight: 128});
+        this.load.spritesheet('spritesheet_item_bet', 'assets/images/item-bet.png', {frameWidth: 185, frameHeight: 128});
+        this.load.spritesheet('spritesheet_point_check', 'assets/images/point-check.png', {frameWidth: 2, frameHeight: 2});
+        this.load.spritesheet('spritesheet_effect1', 'assets/images/effect1.png', {frameWidth: 900, frameHeight: 900});
+        this.load.spritesheet('spritesheet_effect2', 'assets/images/effect2.png', {frameWidth: 900, frameHeight: 900});
+        this.load.spritesheet('spritesheet_effect3', 'assets/images/effect3.png', {frameWidth: 415, frameHeight: 420});
 
-        // ========= SELECT LEVEL  =========
-        this.load.spritesheet('spritesheet_complete_icon', 'assets/select-levels/completed-icon.png', {frameWidth: 49, frameHeight: 48});
-        this.load.spritesheet('spritesheet_level_panel', 'assets/select-levels/level-panel.png', {frameWidth: 270, frameHeight: 188});
-        this.load.spritesheet('spritesheet_return_button', 'assets/select-levels/return-button.png', {frameWidth: 90, frameHeight: 90});
-        this.load.spritesheet('spritesheet_previous_button', 'assets/select-levels/previous-button.png', {frameWidth: 135, frameHeight: 175});
-        this.load.spritesheet('spritesheet_next_button', 'assets/select-levels/next-button.png', {frameWidth: 135, frameHeight: 175});
+        this.load.spritesheet('spritesheet_image_item1', 'assets/images/spins/fish.png', {frameWidth: 50, frameHeight: 53});
+        this.load.spritesheet('spritesheet_image_item2', 'assets/images/spins/chicken.png', {frameWidth: 50, frameHeight: 50});
+        this.load.spritesheet('spritesheet_image_item3', 'assets/images/spins/crab.png', {frameWidth: 60, frameHeight: 43});
+        this.load.spritesheet('spritesheet_image_item4', 'assets/images/spins/deer.png', {frameWidth: 50, frameHeight: 50});
+        this.load.spritesheet('spritesheet_image_item5', 'assets/images/spins/crawfish.png', {frameWidth: 50, frameHeight: 50});
+        this.load.spritesheet('spritesheet_image_item6', 'assets/images/spins/gourd.png', {frameWidth: 43, frameHeight: 44});
+        this.load.spritesheet('spritesheet_image_item7', 'assets/images/spins/1x2.png', {frameWidth: 60, frameHeight: 43});
+        this.load.spritesheet('spritesheet_image_item8', 'assets/images/spins/1x5.png', {frameWidth: 60, frameHeight: 43});
+        this.load.spritesheet('spritesheet_image_item9', 'assets/images/spins/1x10.png', {frameWidth: 60, frameHeight: 43});
+
+        this.load.spritesheet('spritesheet_panel_coin', 'assets/images/panel-coin.png', {frameWidth: 264, frameHeight: 58});
+        this.load.spritesheet('image_countdownframe', 'assets/images/loading/loading-bar0.png', {frameWidth: 642, frameHeight: 59});
+        this.load.spritesheet('image_countdownbar', 'assets/images/loading/loading-bar1.png', {frameWidth: 626, frameHeight: 43});
     }
 
     create() {

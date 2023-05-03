@@ -3,13 +3,19 @@ var SoundHandler = (function() {
     var _scene = null;
     var _bgm = null;
     var _btn = null;
-    var _clickTube = null;
+    var _itemEffect = null;
+    var _tick = null;
+    var _spinningReel = null;
+    var _doneSpin = null;
     var _isMute = false;
 
     function init() {
         _bgm = _scene.sound.add('bgm', { loop: true });
         _btn = _scene.sound.add('button', { loop: false });
-        _clickTube = _scene.sound.add('clickTube', { loop: false });
+        _itemEffect = _scene.sound.add('itemEffect', { loop: false });
+        _tick = _scene.sound.add('tick', { loop: false });
+        _spinningReel = _scene.sound.add('spinningreel', { loop: true });
+        _doneSpin = _scene.sound.add('donespin', { loop: false });
         
         return {
             playBgm: function() {
@@ -20,8 +26,24 @@ var SoundHandler = (function() {
                 _btn.play();
             },
 
-            playClickTube: function() {
-                _clickTube.play();
+            playItemEffect: function() {
+                _itemEffect.play();
+            },
+
+            playTick: function() {
+                _tick.play();
+            },
+
+            playDoneSpin: function() {
+                _doneSpin.play();
+            },
+
+            playSpinningReel: function() {
+                _spinningReel.play();
+            },
+
+            stopSpinningReel: function() {
+                _spinningReel.stop();
             },
 
             muteAll: function() {

@@ -3,7 +3,7 @@ class HomeButton extends BaseButton {
         super(scene, x, y, "spritesheet_homebutton");
 
         this._parent = parent;
-        this.setScale(0.5, 0.5);
+        this.setScale(0.4, 0.4);
     }
 
     handleClick() {

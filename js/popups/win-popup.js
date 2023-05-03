@@ -7,13 +7,13 @@ class WinPopup extends Popup {
 
     initElements() {
         this._panel = new Panel(this._scene, this._x, this._y);
-        this._title = this._scene.add.text(this._panel.position().x - 45 * 2, this._panel.position().y - this._panel.size().y * 0.37, 'Bien joué!', { fontFamily: 'molot', fontSize: 55, color: 'red' });
-        this._btnHome = new HomeButton(this._scene, this._panel.position().x, this._panel.position().y + 160, this);
-        this._btnNextLevel = new NextLevelButton(this._scene, this._panel.position().x + 110, this._panel.position().y + 160, this);
-        this._btnReplay = new ReplayButton(this._scene, this._panel.position().x - 110, this._panel.position().y + 160, this);
-        this._iconCoin = new IconCoins(this._scene, this._panel.position().x - 40, this._panel.position().y);
+        this._title = this._scene.add.text(this._panel.position().x - 35 * 2, this._panel.position().y - this._panel.size().y * 0.4, 'YOU WIN', { fontFamily: 'molot', fontSize: 55, color: 'red' });
+        this._btnHome = new HomeButton(this._scene, this._panel.position().x, this._panel.position().y + 180, this);
+        this._btnNextLevel = new NextLevelButton(this._scene, this._panel.position().x + 120, this._panel.position().y + 180, this);
+        this._btnReplay = new ReplayButton(this._scene, this._panel.position().x - 120, this._panel.position().y + 180, this);
+        this._iconCoin = new IconCoins(this._scene, this._panel.position().x - 70, this._panel.position().y);
         this._iconCoin.setScale(0.9, 0.9);
-        this._textTotalCoin = this._scene.add.text(this._panel.position().x + 15, this._panel.position().y - 40, '+2', { fontFamily: 'molot', fontSize: 80, color: '#135614' });
+        this._textTotalCoin = this._scene.add.text(this._panel.position().x, this._panel.position().y - 40, '+2', { fontFamily: 'molot', fontSize: 80, color: '#135614' });
 
         this._elements.push(this._panel);
         this._elements.push(this._title);

@@ -8,11 +8,11 @@ class PausePopup extends Popup {
 
     initElements() {
         this._panel = new Panel(this._scene, this._x, this._y);
-        this._title = this._scene.add.text(this._panel.position().x - 45, this._panel.position().y - this._panel.size().y * 0.37, 'PAUSE', { fontFamily: 'molot', fontSize: 55, color: '#ff0000' });
-        this._btnHome = new HomeButton(this._scene, this._panel.position().x, this._panel.position().y + 160, this);
+        this._title = this._scene.add.text(this._panel.position().x - 45, this._panel.position().y - this._panel.size().y * 0.4, 'PAUSED', { fontFamily: 'molot', fontSize: 45, color: '#ff0000' });
+        this._btnHome = new HomeButton(this._scene, this._panel.position().x, this._panel.position().y + 180, this);
         this._sound = new SoundButton(this._scene, this._panel._sprite.x, this._panel._sprite.y, this);
-        this._continue = new ContinueButton(this._scene, this._panel.position().x + 110, this._panel.position().y + 160, this);
-        this._replay = new ReplayButton(this._scene, this._panel.position().x - 110, this._panel.position().y + 160, this);
+        this._continue = new ContinueButton(this._scene, this._panel.position().x + 120, this._panel.position().y + 180, this);
+        this._replay = new ReplayButton(this._scene, this._panel.position().x - 120, this._panel.position().y + 180, this);
 
         this._elements.push(this._panel);
         this._elements.push(this._title);

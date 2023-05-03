@@ -27,13 +27,12 @@ class MenuController extends Phaser.Scene {
     }
 
     update(time, delta) {
-        this.updateSelectLevelPopup();
-        this.updateSelectTubePopup();
         this.detectChangeScreenSize();
     }
 
     createTitle() {
         this._title = this.add.sprite(this.width / 2, this.height / 2 - 100, 'spritesheet_title');
+        this._title.setScale(1.2, 1.2);
     }
 
     initSnowEffect() {
@@ -41,65 +40,20 @@ class MenuController extends Phaser.Scene {
     }
 
     createButtons() {
-        this.play = new PlayButton(this, this.width / 2, this.height / 2 + 120);
-        this.sound = new SoundButton(this, this.width / 2 + 280, this.height / 2 - 480);
-        this.shop = new ShopButton(this, this.width / 2, this.height / 2 + 250, this );
+        this.play = new PlayButton(this, this.width / 2, this.height / 2 + 170);
+        this.soundBtn = new SoundButton(this, 1210, 60);
 
         this._listButtons.push(this.play);
         this._listButtons.push(this.sound);
-        this._listButtons.push(this.shop);
     }
 
     startGamePlay() {
-        this.initSelectLevelPopup();
+        this.startGame(1);
     }
 
     startGame(level) {
-        if(level > 0) {
-            storeCurrentLevel(level);
-        }
-
         this.sceneStopped = true;
         this.scene.start('GamePlay');
-    }
-
-    initSettingsPopup() {
-        this.disableMenu();
-        var x = this.width / 2;
-        var y = this.height / 2 - 1000;
-        this._settingsPopup = new SettingsPopup(this, x, y);
-        this._settingsPopup.show();
-    }
-
-    hideSettingsPopup() {
-        this.enableMenu();
-    }
-
-    initSelectLevelPopup() {
-        this.disableMenu();
-        var x = this.width / 2;
-        var y = this.height / 2 - 1000;
-        this._selectLevelPopup = new SelectLevelPopup(this, x, y);
-        this._selectLevelPopup.show();
-    }
-
-    hideSelectLevelPopup() {
-        this.enableMenu();
-        this._selectLevelPopup.hide();
-        
-        this._selectLevelPopup = null;
-    }
-
-    updateSelectLevelPopup() {
-        if(this._selectLevelPopup) {
-            this._selectLevelPopup.update();
-        }
-    }
-
-    updateSelectTubePopup() {
-        if(this._shopPopup) {
-            this._shopPopup.update();
-        }
     }
 
     detectChangeScreenSize() {
@@ -112,22 +66,6 @@ class MenuController extends Phaser.Scene {
 
     handleChangeScreenSize() {
         console.log('Screen Change');
-    }
-
-    onClickShopButton() {
-        this.disableMenu();
-        var x = this.width / 2;
-        var y = this.height / 2 - 1000;
-        var totalCoins = getTotalCoins() || 0; // TODO: set total coins here
-        this._shopPopup = new SelectTubePopup(this, x, y, this, totalCoins);
-        this._shopPopup.show();
-    }
-
-    hideShopPopup() {
-        this.enableMenu();
-        this._shopPopup.hide();
-        
-        this._shopPopup = null;
     }
 
     enableMenu() {

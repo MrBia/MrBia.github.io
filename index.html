@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ball Sort Puzzle</title>
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Spin Wheel</title>
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <script type="text/javascript" src="phaser/phaser.min.js"></script>
@@ -30,14 +29,15 @@
 
     <!-- BACKGROUND -->
     <script type="text/javascript" src="js/background.js"></script>
+    <script type="text/javascript" src="js/effect-background1.js"></script>
+    <script type="text/javascript" src="js/effect-background2.js"></script>
+    <script type="text/javascript" src="js/effect-background3.js"></script>
 
-    <!-- LOGO SCREEN -->
-    <script type="text/javascript" src="js/logo.js"></script>
-    <script type="text/javascript" src="js/logo-screen.js"></script>
-
-    <!-- ICONS -->
-    <script type="text/javascript" src="js/sprites/coins.js"></script>
-    <script type="text/javascript" src="js/popups/select-tubes/selected-icon.js"></script>
+    <!-- WHEEL -->
+    <script type="text/javascript" src="js/objects/wheel-panel.js"></script>
+    <script type="text/javascript" src="js/objects/item.js"></script>
+    <script type="text/javascript" src="js/objects/wheel.js"></script>
+    <script type="text/javascript" src="js/objects/point-check.js"></script>
 
     <!-- BUTTON -->
     <script type="text/javascript" src="js/buttons/base-button.js"></script>
@@ -51,6 +51,18 @@
     <script type="text/javascript" src="js/buttons/continue-button.js"></script>
     <script type="text/javascript" src="js/buttons/shop-button.js"></script>
     <script type="text/javascript" src="js/buttons/skip-button.js"></script>
+    <script type="text/javascript" src="js/buttons/spin-button.js"></script>
+    <script type="text/javascript" src="js/buttons/plus-button.js"></script>
+    <script type="text/javascript" src="js/buttons/sub-button.js"></script>
+
+    <!-- PANEL BET -->
+    <script type="text/javascript" src="js/objects/panel-price-bet.js"></script>
+    <script type="text/javascript" src="js/objects/panel-item-bet.js"></script>
+    <script type="text/javascript" src="js/objects/frame-price.js"></script>
+    <script type="text/javascript" src="js/objects/item-bet.js"></script>
+    <script type="text/javascript" src="js/objects/image-item-bet.js"></script>
+    <script type="text/javascript" src="js/objects/item-effect-win.js"></script>
+    <script type="text/javascript" src="js/objects/panel-coin.js"></script>
 
     <!-- POPUPS -->
     <script type="text/javascript" src="js/popups/panel.js"></script>
@@ -59,45 +71,6 @@
     <script type="text/javascript" src="js/popups/pause-popup.js"></script>
     <script type="text/javascript" src="js/popups/win-popup.js"></script>
     <script type="text/javascript" src="js/popups/tutorial-popup.js"></script>
-
-    <!-- SELECT LEVEL -->
-    <script type="text/javascript" src="js/popups/select-levels/previous-button.js"></script>
-    <script type="text/javascript" src="js/popups/select-levels/next-button.js"></script>
-    <script type="text/javascript" src="js/popups/select-levels/return-button.js"></script>
-    <script type="text/javascript" src="js/popups/select-levels/level-panel.js"></script>
-    <script type="text/javascript" src="js/popups/select-levels/select-level-popup.js"></script>
-
-    <!-- SELECT TUBES -->
-    <script type="text/javascript" src="js/popups/select-tubes/tube-select.js"></script>
-    <script type="text/javascript" src="js/popups/select-tubes/tube-select-1.js"></script>
-    <script type="text/javascript" src="js/popups/select-tubes/tube-select-2.js"></script>
-    <script type="text/javascript" src="js/popups/select-tubes/tube-select-3.js"></script>
-    <script type="text/javascript" src="js/popups/select-tubes/tube-select-4.js"></script>
-    <script type="text/javascript" src="js/popups/select-tubes/tube-select-5.js"></script>
-    <script type="text/javascript" src="js/popups/select-tubes/tube-select-6.js"></script>
-    <script type="text/javascript" src="js/popups/select-tubes/select-tube-popup.js"></script>
-
-    <!-- TUBE -->
-    <script type="text/javascript" src="js/sprites/tubes/tube.js"></script>
-    <script type="text/javascript" src="js/sprites/tubes/tube-1.js"></script>
-    <script type="text/javascript" src="js/sprites/tubes/tube-2.js"></script>
-    <script type="text/javascript" src="js/sprites/tubes/tube-3.js"></script>
-    <script type="text/javascript" src="js/sprites/tubes/tube-4.js"></script>
-    <script type="text/javascript" src="js/sprites/tubes/tube-5.js"></script>
-    <script type="text/javascript" src="js/sprites/tubes/tube-6.js"></script>
-
-    <!-- BALL -->
-    <script type="text/javascript" src="js/sprites/balls/ball.js"></script>
-    <script type="text/javascript" src="js/sprites/balls/ball-darkgreen.js"></script>
-    <script type="text/javascript" src="js/sprites/balls/ball-green.js"></script>
-    <script type="text/javascript" src="js/sprites/balls/ball-orange.js"></script>
-    <script type="text/javascript" src="js/sprites/balls/ball-pink.js"></script>
-    <script type="text/javascript" src="js/sprites/balls/ball-purple.js"></script>
-    <script type="text/javascript" src="js/sprites/balls/ball-red.js"></script>
-    <script type="text/javascript" src="js/sprites/balls/ball-seablue.js"></script>
-    <script type="text/javascript" src="js/sprites/balls/ball-skyblue.js"></script>
-    <script type="text/javascript" src="js/sprites/balls/ball-yellow.js"></script>
-    <script type="text/javascript" src="js/sprites/balls/ball-gray.js"></script>
 
     <!-- CONTROLLER -->
     <script type="text/javascript" src="js/controllers/loading-controller.js"></script>

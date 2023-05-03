@@ -5,7 +5,7 @@ class SoundButton extends BaseButton {
         this._isOn = !SoundHandler.getInstance().isMute();
         this.toggleSprite();
 
-        this.setScale(0.5, 0.5);
+        this.setScale(0.4, 0.4);
     }
 
     handleClick() {

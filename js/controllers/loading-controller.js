@@ -4,7 +4,7 @@ class LoadingScreenController extends Phaser.Scene {
 
         this._title = null;
         this._loadingPercent = null;
-        this._percent = 0;
+        this._time = 2.5;
     }
 
     preload() {
@@ -18,17 +18,26 @@ class LoadingScreenController extends Phaser.Scene {
         this.background = new Background(this, this.width / 2, this.height / 2);
 
         this._logo = this.add.sprite(this.width / 2, this.height / 2 - 50, 'spritesheet_title');
-        this._logo.setScale(1);
 
-        var textSize = 100;
-        var text = this._percent + '%';
-        this._loadingPercent = this.add.text(this.width / 2 - 50, this.height / 2 + 100, text, { fontFamily: 'molot', fontSize: textSize, color: '#4383c1' });
-        this.add.text(this.width / 2 - 80, this.height / 2 + 200, 'Chargement', { fontFamily: 'molot', fontSize: 50, color: '#4383c1' });
+        var position = 150;
+        var frame = this.add.image(this.width / 2, this.height / 2 + position, 'image_countdownframe');
+        frame.setOrigin(0.5, 0.5);
+        this._bar = this.add.image(this.width / 2, this.height / 2 + position, 'image_countdownbar');
+        this._bar.setOrigin(0.5, 0.5);
+        frame.setScale(0.5, 0.5);
+        this._bar.setScale(0.5, 0.5);
+        this._widthBar = this._bar.width;
+        this._heightBar = this._bar.height;
+        this._currentWidth = 0;
+        this._bar.setCrop(0, 0, this._currentWidth, this._heightBar);
+
+        var loadingText = this.add.text(this.width / 2, this.height / 2 + 200, 'LOADING', { fontFamily: 'molot', fontSize: 50, color: 'yellow' });
+        loadingText.setOrigin(0.5, 0.5)
     }
 
     update(time, delta) {
         this.updateBackground(time, delta);
-        this.updatePercent(delta);
+        this.updateCountDown();
     }
 
     updateBackground(time, delta) {
@@ -37,14 +46,12 @@ class LoadingScreenController extends Phaser.Scene {
         this.background.update(time, delta, cameraWidth, cameraHeight);
     }
 
-    updatePercent(delta) {
-        if(Math.floor(this._percent) < 100) {
-            this._percent += (delta / 20);
-            var text = Math.floor(this._percent) + '%';
-            this._loadingPercent.setText(text);
-        }
-        else {
-            this.scene.start('LogoScreen');
+    updateCountDown() {
+        this._currentWidth += (this._widthBar / (this._time * 10));
+        this._bar.setCrop(0, 0, this._currentWidth, this._heightBar);
+
+        if(this._currentWidth > this._widthBar) {
+            this.scene.start('MainMenu');
         }
     }
 }

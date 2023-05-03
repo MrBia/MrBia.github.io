@@ -2,8 +2,8 @@ var gameSettings = {
     playerSpeed: 60,
 }
 
-const SIZE_WIDTH_SCREEN = 720
-const SIZE_HEIGHT_SCREEN = 1080
+const SIZE_WIDTH_SCREEN = 1280
+const SIZE_HEIGHT_SCREEN = 720
 
 window.onload = function() {
     var config = {
@@ -16,7 +16,7 @@ window.onload = function() {
             height: SIZE_HEIGHT_SCREEN,
         },
         backgroundColor: '#000',
-        scene: [PreLoader, LoadingScreenController, LogoScreen, MenuController, GameController],
+        scene: [PreLoader, LoadingScreenController, MenuController, GameController],
         
         physics: {
             default: 'arcade',
