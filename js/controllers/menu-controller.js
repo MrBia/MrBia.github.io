@@ -31,8 +31,7 @@ class MenuController extends Phaser.Scene {
     }
 
     createTitle() {
-        this._title = this.add.sprite(this.width / 2, this.height / 2 - 100, 'spritesheet_title');
-        this._title.setScale(1.2, 1.2);
+        this._title = this.add.sprite(this.width / 2, this.height / 2 - 90, 'spritesheet_title');
     }
 
     initSnowEffect() {
@@ -40,8 +39,11 @@ class MenuController extends Phaser.Scene {
     }
 
     createButtons() {
-        this.play = new PlayButton(this, this.width / 2, this.height / 2 + 170);
-        this.soundBtn = new SoundButton(this, 1210, 60);
+        this.play = new PlayButton(this, this.width / 2, this.height / 2 + 220);
+        this.sound = new SoundButton(this, this.width - 60, this.height / 2 - 300);
+
+        this.play.setScale(0.6, 0.6);
+        this.sound.setScale(0.3, 0.3);
 
         this._listButtons.push(this.play);
         this._listButtons.push(this.sound);

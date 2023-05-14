@@ -15,113 +15,267 @@ class GameController extends Phaser.Scene {
 
     create() {
         this.background = new Background(this, this.width / 2, this.height / 2);
-        this.effectBg1 = new EffectBackground1(this, this.width / 2, this.height / 2);
-        this.effectBg2 = new EffectBackground2(this, this.width / 2, this.height / 2);
-        this.effectBg3 = new EffectBackground3(this, this.width / 2, this.height / 2);
-        this.effectBg3.setScale(3, 3);
 
+        this.initSnowEffect();
+        this.initButtons();
         this.startGame();
     }
 
     startGame() {
-        // // CALLED WHEN START GAME, REPLAY GAME, NEXT GAME
-        this._startCoin = 30000;
-        this.createGame();
-        this.initTutorial();
+        this.boxes = [];
+        this.cat = null;
+        this.round = null;
+        this.currentRound = 1;
+
+        if(1 == this.currentRound)
+        {
+            this.initTutorial();
+        }
+
+        // this.createGame();
     }
 
     createGame() {
-        this.homeBtn = new HomeButton(this, 1210, 60, this);
-        this.soundBtn = new SoundButton(this, 1210, 160);
-        this.panelCoin = new PanelCoin(this, this.width / 2, 60);
-        this._totalCoinText = this.add.text(this.width / 2, 60, '$' + this._startCoin, { fontFamily: 'molot', fontSize: 60, color: 'yellow' });
-        this._totalCoinText.setOrigin(0.5, 0.5);
-        this._wheel = new Wheel(this, this.width / 4, this.height / 2);
-        this._panelPriceBet = new PanelPriceBet(this, 930, 600, this._startCoin);
-        this._panelSelectItemBet = new PanelItemBet(this, 800, 250);
-    }
-
-    isWin(nameResult, listItemBet) {
-        for(var i = 0; i < listItemBet.length; i++) {
-            if(nameResult == listItemBet[i]) return true;
+        var additionalY = 120;
+        if(null == this.cat)
+        {
+            this.cat = new Cat(this, this.width / 2, 185 + additionalY);
         }
 
-        return false;
+        if(this.boxes.length <= 0) {
+            var startPos = 200;
+            var gap = 450;
+            for(var i = 0; i < 3; i++)
+            {
+                var box = new Box(this, startPos + (i * gap), this.height / 2 + additionalY, i);
+                this.boxes.push(box);
+            }
+        }
+
+        this.showRound();
+
+        this._eventTimeOut = this.time.addEvent({
+            delay: 2000,
+            callbackScope: this,
+            loop: false,
+
+            callback: function() {
+                this.cat.moveToPosition(this.boxes[1]);
+            }.bind(this)
+        });
     }
 
-    updateStartCoinForBet() {
-        var priceBet = this._panelPriceBet.getPriceBet();
-        this.updateStartCoin(-priceBet);
+    showRound() {
+        if(null == this.round) {
+            this.round = new Round(this, this.width / 2, -1000);
+            this.round.zIndex(100);
+        }
+
+        this.round.setPosition(this.width / 2, -1000);
+        this.round.setRound(this.currentRound);
+        this.tweens.add({
+            targets: this.round._sprite,
+            x: this.width / 2,
+            y: 100,
+            duration: 1000,
+
+            onUpdate: function() {
+                this.round.updateTextPos();
+            }.bind(this),
+            onComplete: function() {
+                // start game
+                // this.startGameplay();
+            }.bind(this)
+        });
     }
 
-    updateTotalCoinText() {
-        this._totalCoinText.setText('$' + this._startCoin);
-    }
+    onChoseBox(item) {
+        if( this.pausedGame ) return;
+        // ig.game.inProgress = true;
 
-    updateStartCoin(coin) {
-        this._startCoin += coin;
-        this.updateTotalCoinText();
-    }
-
-    checkConditionToSpin() {
-        var betItemCheck = false;
-        var priceCheck = false;
-
-        betItemCheck = this._panelSelectItemBet.checkSelected();
-        priceCheck = this._panelPriceBet.checkSelected();
-        
-        if(betItemCheck && priceCheck) {
-            this._wheel.enableSpin();
+        this.disableGame();
+        this.isCorrect = false;
+        if(item.index == 1)
+        {
+            this.correctAnswer += 1;
+            this.isCorrect = true;
         }
         else {
-            this._wheel.disableSpin();
+            this.time.addEvent({
+                delay: 1200,
+                callback: function(){
+                    this.showLosePopup();
+                }.bind(this),
+                callbackScope: this,
+                loop: false
+            });
+        }
+
+        this.cat.forceToPosition(this.boxes[1]);
+        this.cat.showCat();
+    }
+
+    nextRound() {
+        this.currentRound +=1;
+        this.showRound();
+
+        this.time.addEvent({
+            delay: 1200,
+            callback: function(){
+                this.cat.moveToPosition(this.boxes[1]);
+            }.bind(this),
+            callbackScope: this,
+            loop: false
+        });
+    }
+
+    startGameplay() {
+        this.totalShuffle = this.currentRound + 3;
+        if( this.totalShuffle > 23 ) {
+            this.totalShuffle = 23;
+        }
+        this.shuffleCount = 0;
+        this.shuffleDuration = 500;
+        this.shuffleDuration -= 0.1;
+        if( this.shuffleDuration < 0.25 ) {
+            this.shuffleDuration = 0.25;
+        }
+
+        if( this.currentRound > 1 && this.boxes.length < 4 ) {
+            this.shuffleDuration = 0.5;
+
+            this._eventTimeOut = this.time.addEvent({
+                delay: 500,
+                // add more box
+                callback: this.addMoreBox.bind(this),
+                callbackScope: this,
+                loop: false
+            });
+
+            return;
+        }
+        
+        this.shuffleBoxes();
+    }
+
+    addMoreBox() {
+        for( var i = 0; i < this.boxes.length; i++ ) {
+            this.boxes[i].setScale(0.8, 0.8);
+        }
+        this.cat.setScale(0.8, 0.8);
+        this.cat.showPos = 340;
+
+        var totalWidth = this.boxes[ 0 ].size().x * 4;
+        var space = 40;
+        totalWidth += (space * 3);
+        var startPos = this.width / 2 - totalWidth / 2 + this.boxes[ 0 ].size().x / 2;
+
+        for( var i = 0; i < this.boxes.length; i++ ) {
+            this.tweens.add({
+                targets: this.boxes[i]._sprite,
+                x: startPos + ( i * this.boxes[i].size().x + space * i ),
+                y: this.boxes[i].position().y,
+                duration: 500
+            });
+        }
+
+        this.time.addEvent({
+            delay: 1000,
+            callback: function() {
+                var box = new Box(this, startPos + ( 3 * this.boxes[0].size().x + space * 3 ),this.boxes[0].position().y , 3);
+                box.setScale(0.8, 0.8);
+                this.boxes.push(box);
+                this.currentRound -= 1;
+                this.showCatAgain();
+            }.bind(this),
+            callbackScope: this,
+            loop: false
+        });
+    }
+
+    showCatAgain() {
+        this.cat.forceToPosition( this.boxes[ 1 ] );
+        this.cat._sprite.alpha = 1;
+        this.cat.showCat();
+    }
+
+    shuffleBoxes() {
+        this.disableGame();
+        var choices = [];
+        for(var i = 0; i < this.boxes.length; i++)
+        {
+            choices.push(this.boxes[i]);
+        }
+
+        var index = Math.floor(Math.random() * choices.length);
+        var firstBox = choices[index];
+        choices.splice(index, 1);
+        
+        index = Math.floor(Math.random() * choices.length);
+        var secondBox = choices[index];
+        choices.splice(index,1);
+
+        var firstAnchoredX = firstBox.position().x;
+        var secondAnchoredX = secondBox.position().x;
+
+        this.tweens.add({
+            targets: firstBox._sprite,
+            x: secondAnchoredX,
+            y: secondBox.position().y,
+            duration: this.shuffleDuration
+        });
+
+        this.tweens.add({
+            targets: secondBox._sprite,
+            x: firstAnchoredX,
+            y: secondBox.position().y,
+            duration: this.shuffleDuration,
+            
+            onComplete: function() {
+                this.shuffleCount++;
+                if(this.shuffleCount<this.totalShuffle)
+                {
+                    this.shuffleBoxes();
+                }
+                else
+                {
+                    this.enableGame();
+                }
+            }.bind(this)
+        });
+    }
+
+    enableGame() {
+        for(var i = 0; i < this.boxes.length; i++) {
+            this.boxes[i].enableBox();
         }
     }
 
-    enableAllPanels() {
-        this._panelPriceBet.enableSet();
-        this._panelSelectItemBet.enableSet();
-    }
-
-    disableAllPanels() {
-        this._panelPriceBet.disableSet();
-        this._panelSelectItemBet.disableSet();
-    }
-
-    isX5(nameResult) {
-        if(nameResult == TYPE_ITEM.ITEM_1X5) return true;
-        return false;
-    }
-
-    isX10(nameResult) {
-        if(nameResult == TYPE_ITEM.ITEM_1X10) return true;
-        return false;
-    }
-
-    onDoneSpin(nameResult) {
-        this.enableAllPanels();console.log(nameResult)
-        var priceBet = this._panelPriceBet.getPriceBet();
-        var listItemBet = this._panelSelectItemBet.getItemSelect();
-
-        if(this.isWin(nameResult, listItemBet)) {
-            if(this.isX5(nameResult)) {
-                this.updateStartCoin((priceBet * 5));
-            }
-            else if(this.isX10(nameResult)) {
-                this.updateStartCoin((priceBet * 10));
-            }
-            else {
-                this.updateStartCoin((priceBet * 2));
-            }
+    disableGame() {
+        for(var i = 0; i < this.boxes.length; i++) {
+            this.boxes[i].disableBox();
         }
     }
 
-    onClickHomeButton() {
-        this.scene.start('MainMenu');
+    showLosePopup() {
+        this.disableGame();
+        this.win = new LosePopup(this, this.width / 2, this.height / 2 - 1000, this);
+        this.win.show(0);
     }
 
     initButtons() {
-        this._buttonPause = new PauseButton(this, this.width / 2 + 280, this.height / 2 - 480);
+        this.sound = new SoundButton(this, this.width - 60, this.height / 2 - 300);
+        this.back = new BackButton(this, this.width - 160, this.height / 2 - 300, this);
+        this.sound.setScale(0.3, 0.3);
+        this.back.setScale(0.3, 0.3);
+    }
+
+    onClickBackButton() {
+        this.scene.start('MainMenu');
+    }
+
+    initSnowEffect() {
+        this._snowEffect = new SnowEffect(this, this.width / 2, this.height / 2, this.canvasWidth + 300, this.canvasHeight + 80);
     }
 
     update(time, delta) {
@@ -132,32 +286,49 @@ class GameController extends Phaser.Scene {
         this.disableGame();
         var x = this.width / 2;
         var y = this.height / 2 - 1000;
-        this._tutorialPopup = new TutorialPopup(this, x, y, this, 50);
+        this._tutorialPopup = new TutorialPopup(this, x, y);
         this._tutorialPopup.show(400);
+    }
+
+    initPausePopup() {
+        this.disableGame();
+        var x = this.width / 2;
+        var y = this.height / 2 - 1000;
+        this._pausePopup = new PausePopup(this, x, y);
+        this._pausePopup.show();
+    }
+
+    initConffeti() {
+        this._conffetiEffect = new ConffetiEffect(this, this.width / 2, this.height / 2);
+
+        setTimeout(function() {
+            this._conffetiEffect.clear();
+            this._conffetiEffect.destroy(true);
+            this._conffetiEffect = null;
+        }.bind(this), 2500);
+    }
+
+    initWinPopup() {
+        this.disableGame();
+        var delay = 700;
+        var x = this.width / 2;
+        var y = this.height / 2 - 1000;
+        this._winPopup = new WinPopup(this, x, y);
+        this._winPopup.show(delay);
     }
 
     hideTutorial() {
         this.enableGame();
         this._tutorialPopup.hide();
-    }
-
-    disableGame() {
-        this.disableAllPanels();
-        this.homeBtn.disable();
-        this.soundBtn.disable();
-        this._wheel.disableSpin();
-    }
-
-    enableGame() {
-        // enable wheel, prite, bet,...
-        this.enableAllPanels();
-        this.homeBtn.enable();
-        this.soundBtn.enable();
-        this.checkConditionToSpin();
+        this.createGame();
     }
 
     hidePausePopup() {
         this.enableGame();
+    }
+
+    hideWinPopup() {
+        this._winPopup.hide();
     }
 
     pauseAndReplayLevel() {

@@ -19,7 +19,7 @@ class LoadingScreenController extends Phaser.Scene {
 
         this._logo = this.add.sprite(this.width / 2, this.height / 2 - 50, 'spritesheet_title');
 
-        var position = 150;
+        var position = 190;
         var frame = this.add.image(this.width / 2, this.height / 2 + position, 'image_countdownframe');
         frame.setOrigin(0.5, 0.5);
         this._bar = this.add.image(this.width / 2, this.height / 2 + position, 'image_countdownbar');
@@ -31,7 +31,7 @@ class LoadingScreenController extends Phaser.Scene {
         this._currentWidth = 0;
         this._bar.setCrop(0, 0, this._currentWidth, this._heightBar);
 
-        var loadingText = this.add.text(this.width / 2, this.height / 2 + 200, 'LOADING', { fontFamily: 'molot', fontSize: 50, color: 'yellow' });
+        var loadingText = this.add.text(this.width / 2, this.height / 2 + position + 50, 'LOADING', { fontFamily: 'molot', fontSize: 50, color: 'yellow' });
         loadingText.setOrigin(0.5, 0.5)
     }
 

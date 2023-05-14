@@ -53,18 +53,6 @@ class BaseObject extends Phaser.GameObjects.Sprite {
         }
     }
 
-    angle() {
-        if(this._sprite) {
-            return this._sprite.angle;
-        }
-    }
-
-    setAngle(angle) {
-        if(this._sprite) {
-            this._sprite.angle = angle;
-        }
-    }
-
     size() {
         if(!this._sprite) return null;
 
@@ -99,12 +87,6 @@ class BaseObject extends Phaser.GameObjects.Sprite {
 
         if(this._sprite) {
             this._sprite.destroy();
-        }
-    }
-
-    setAlpha(alpha) {
-        if(this._sprite) {
-            this._sprite.alpha = alpha;
         }
     }
 }

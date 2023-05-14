@@ -3,7 +3,7 @@ class SkipButton extends BaseButton {
         super(scene, x, y, "spritesheet_nextlevelbutton");
 
         this._parent = parent;
-        this.setScale(0.5, 0.5);
+        this.setScale(0.3, 0.3);
     }
 
     handleClick() {

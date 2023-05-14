@@ -1,4 +1,4 @@
-class HomeButton extends BaseButton {
+class BackButton extends BaseButton {
     constructor(scene, x, y, parent) {
         super(scene, x, y, "spritesheet_homebutton");
 
@@ -8,7 +8,7 @@ class HomeButton extends BaseButton {
 
     handleClick() {
         if(this._parent) {
-            this._parent.onClickHomeButton();
+            this._parent.onClickBackButton();
         }
     }
 }
