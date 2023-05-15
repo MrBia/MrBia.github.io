@@ -24,6 +24,7 @@ class Box extends BaseObject {
         if(!this._enableClick) return;
         console.log('onclick');
         this.shakeCount = 0;
+        SoundHandler.getInstance().playClickBox();
         this.shakeBox();
     }
 

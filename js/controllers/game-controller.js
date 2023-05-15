@@ -26,6 +26,8 @@ class GameController extends Phaser.Scene {
         this.cat = null;
         this.round = null;
         this.currentRound = 1;
+        this.roundAddMoreBox = 6;
+        this.shuffleDuration = 500;
 
         if(1 == this.currentRound)
         {
@@ -63,6 +65,8 @@ class GameController extends Phaser.Scene {
                 this.cat.moveToPosition(this.boxes[1]);
             }.bind(this)
         });
+
+        this.disableGame();
     }
 
     showRound() {
@@ -89,6 +93,11 @@ class GameController extends Phaser.Scene {
         });
     }
 
+    randomInt(min, max) {
+        var ran = Math.floor(Math.random() * ( max + 1 - min ) + min);
+        return ran;
+    }
+
     onChoseBox(item) {
         if( this.pausedGame ) return;
         // ig.game.inProgress = true;
@@ -113,10 +122,20 @@ class GameController extends Phaser.Scene {
 
         this.cat.forceToPosition(this.boxes[1]);
         this.cat.showCat();
+        var ranInt = this.randomInt(1, 3);
+        if(1 == ranInt) {
+            SoundHandler.getInstance().playCat1();
+        }
+        else if(2 == ranInt) {
+            SoundHandler.getInstance().playCat2();
+        }
+        else if(3 == ranInt) {
+            SoundHandler.getInstance().playCat3();
+        }
     }
 
     nextRound() {
-        this.currentRound +=1;
+        this.currentRound += 1;
         this.showRound();
 
         this.time.addEvent({
@@ -135,13 +154,12 @@ class GameController extends Phaser.Scene {
             this.totalShuffle = 23;
         }
         this.shuffleCount = 0;
-        this.shuffleDuration = 500;
-        this.shuffleDuration -= 0.1;
-        if( this.shuffleDuration < 0.25 ) {
-            this.shuffleDuration = 0.25;
+        this.shuffleDuration -= 15;
+        if( this.shuffleDuration < 250 ) {
+            this.shuffleDuration = 250;
         }
 
-        if( this.currentRound > 1 && this.boxes.length < 4 ) {
+        if( this.currentRound > this.roundAddMoreBox && this.boxes.length < 4 ) {
             this.shuffleDuration = 0.5;
 
             this._eventTimeOut = this.time.addEvent({
@@ -200,6 +218,7 @@ class GameController extends Phaser.Scene {
     }
 
     shuffleBoxes() {
+        SoundHandler.getInstance().playShuffling();
         this.disableGame();
         var choices = [];
         for(var i = 0; i < this.boxes.length; i++)

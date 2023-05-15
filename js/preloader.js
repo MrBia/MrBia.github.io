@@ -10,7 +10,11 @@ class PreLoader extends Phaser.Scene{
         // ========= LOADING AUDIO =========
         this.load.audio('bgm', ['assets/audio/bgm.mp3']);
         this.load.audio('button', ['assets/audio/button.mp3']);
-        this.load.audio('clickTube', ['assets/audio/click-tube.mp3']);
+        this.load.audio('cat1', ['assets/audio/cat1.mp3']);
+        this.load.audio('cat2', ['assets/audio/cat2.mp3']);
+        this.load.audio('cat3', ['assets/audio/cat3.mp3']);
+        this.load.audio('shuffling', ['assets/audio/shuffling.mp3']);
+        this.load.audio('clickBox', ['assets/audio/click-box.mp3']);
 
         // ========= LOADING BAR   =========
         this.load.spritesheet('spritesheet_loading_frame', 'assets/loading-bar.png', {frameWidth: 200, frameHeight: 5});

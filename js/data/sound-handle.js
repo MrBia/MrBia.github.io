@@ -3,13 +3,21 @@ var SoundHandler = (function() {
     var _scene = null;
     var _bgm = null;
     var _btn = null;
-    var _clickTube = null;
+    var _cat1 = null;
+    var _cat2 = null;
+    var _cat3 = null;
+    var _shuffling = null;
+    var _clickBox = null;
     var _isMute = false;
 
     function init() {
         _bgm = _scene.sound.add('bgm', { loop: true });
         _btn = _scene.sound.add('button', { loop: false });
-        _clickTube = _scene.sound.add('clickTube', { loop: false });
+        _cat1 = _scene.sound.add('cat1', { loop: false });
+        _cat2 = _scene.sound.add('cat2', { loop: false });
+        _cat3 = _scene.sound.add('cat3', { loop: false });
+        _shuffling = _scene.sound.add('shuffling', { loop: false });
+        _clickBox = _scene.sound.add('clickBox', { loop: false });
         
         return {
             playBgm: function() {
@@ -20,8 +28,24 @@ var SoundHandler = (function() {
                 _btn.play();
             },
 
-            playClickTube: function() {
-                _clickTube.play();
+            playCat1: function() {
+                _cat1.play();
+            },
+
+            playCat2: function() {
+                _cat2.play();
+            },
+
+            playCat3: function() {
+                _cat3.play();
+            },
+
+            playShuffling: function() {
+                _shuffling.play();
+            },
+
+            playClickBox: function() {
+                _clickBox.play();
             },
 
             muteAll: function() {
