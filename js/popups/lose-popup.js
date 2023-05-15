@@ -8,7 +8,7 @@ class LosePopup extends Popup {
     initElements() {
         this._panel = new Panel(this._scene, this._x, this._y);
         this._title = this._scene.add.text(this._panel.position().x, this._panel.position().y - 210, 'Try Again!', { fontFamily: 'molot', fontSize: 55, color: 'white' });
-        this._content = this._scene.add.text(this._panel.position().x, this._panel.position().y, 'Do you want to try again!', { fontFamily: 'molot', fontSize: 35, color: 'green' });
+        this._content = this._scene.add.text(this._panel.position().x, this._panel.position().y, "OOPS, Let's try again !!", { fontFamily: 'molot', fontSize: 35, color: 'white' });
         this._btnHome = new HomeButton(this._scene, this._panel.position().x + 80, this._panel.position().y + 180, this);
         this._btnReplay = new ReplayButton(this._scene, this._panel.position().x - 80, this._panel.position().y + 180, this);
         

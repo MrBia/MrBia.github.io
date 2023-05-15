@@ -29,6 +29,9 @@ class GameController extends Phaser.Scene {
         this.roundAddMoreBox = 6;
         this.shuffleDuration = 500;
 
+        this.text = this.add.text(this.width / 2, this.height / 2 + 300, "Where is the kitten ?", { fontFamily: 'molot', fontSize: 35, color: 'white' });
+        this.text.setOrigin(0.5, 0.5);
+
         if(1 == this.currentRound)
         {
             this.initTutorial();
@@ -268,12 +271,14 @@ class GameController extends Phaser.Scene {
         for(var i = 0; i < this.boxes.length; i++) {
             this.boxes[i].enableBox();
         }
+        this.back.enable();
     }
 
     disableGame() {
         for(var i = 0; i < this.boxes.length; i++) {
             this.boxes[i].disableBox();
         }
+        this.back.disable();
     }
 
     showLosePopup() {
