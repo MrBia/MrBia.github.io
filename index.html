@@ -1,658 +1,757 @@
 
 <!DOCTYPE html>
-<html lang="vi">
-
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>My Game Arcade</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #10131c;
-      color: #f5f5f5;
-    }
-
-    /* HEADER */
-
-    header {
-      padding: 35px 20px;
-      text-align: center;
-      background: #191f30;
-    }
-
-    header h1 {
-      margin: 0 0 10px;
-    }
-
-    header p {
-      color: #aab2c5;
-    }
-
-    /* MAIN */
-
-    main {
-      max-width: 1100px;
-      margin: 30px auto;
-      padding: 0 20px;
-    }
-
-    /* SEARCH */
-
-    .toolbar {
-      margin-bottom: 25px;
-    }
-
-    input {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #343c50;
-      border-radius: 8px;
-      background: #191f30;
-      color: white;
-      font-size: 16px;
-      outline: none;
-    }
-
-    input:focus {
-      border-color: #5865f2;
-    }
-
-    /* GAME GRID */
-
-    .games {
-      display: grid;
-      grid-template-columns: repeat(
-        auto-fill,
-        minmax(230px, 1fr)
-      );
-      gap: 22px;
-      align-items: stretch;
-    }
-
-    /* GAME CARD */
-
-    .game-card {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-
-      height: 340px;
-      min-width: 0;
-
-      overflow: hidden;
-
-      background: #191f30;
-      border: 1px solid #293149;
-      border-radius: 12px;
-
-      transition:
-        transform 0.25s ease,
-        box-shadow 0.25s ease,
-        border-color 0.25s ease;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Game Arcade</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #111827;
+            color: #f9fafb;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+
+        header {
+            background: #1f2937;
+            padding: 24px 20px;
+            text-align: center;
+            border-bottom: 1px solid #374151;
+        }
+
+        header h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        /* MAIN */
+
+        main {
+            max-width: 1200px;
+            margin: auto;
+            padding: 30px 20px 60px;
+        }
+
+        /* SEARCH */
+
+        .search-container {
+            margin-bottom: 30px;
+        }
+
+        #searchInput {
+            width: 100%;
+            max-width: 500px;
+            display: block;
+            margin: auto;
+            padding: 13px 18px;
+
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 10px;
+
+            color: white;
+            font-size: 15px;
+            outline: none;
+
+            transition: border-color 0.2s;
+        }
+
+        #searchInput:focus {
+            border-color: #3b82f6;
+        }
+
+        #searchInput::placeholder {
+            color: #9ca3af;
+        }
+
+        /* GAME GRID */
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 24px;
+
+            align-items: start;
+        }
+
+        /* GAME CARD */
+
+        .game-card {
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 14px;
+
+            overflow: hidden;
+            min-width: 0;
+            min-height: 340px;
+            height: auto;
+
+            display: flex;
+            flex-direction: column;
+            align-self: start;
 
-    .game-card:hover,
-    .game-card:focus-within {
-      transform: translateY(-7px) scale(1.02);
-      border-color: #5865f2;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-      z-index: 2;
-    }
+            transition:
+                transform 0.25s ease,
+                border-color 0.25s ease,
+                box-shadow 0.25s ease;
+        }
 
-    /* GAME IMAGE */
+        .game-card:hover {
+            transform: translateY(-5px);
+            border-color: #3b82f6;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
 
-    .game-image {
-      position: relative;
-      flex-shrink: 0;
+        /* GAME IMAGE */
 
-      height: 155px;
+        .game-image {
+            width: 100%;
+            height: 180px;
+            flex-shrink: 0;
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+            background: #374151;
 
-      overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-      background: #252e45;
-      font-size: 55px;
-    }
+            overflow: hidden;
+        }
 
-    .game-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+        .game-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
 
-      transition: transform 0.35s ease;
-    }
+            transition: transform 0.35s ease;
+        }
 
-    .game-card:hover .game-image img {
-      transform: scale(1.08);
-    }
+        .game-card:hover .game-image img {
+            transform: scale(1.05);
+        }
 
-    /* GAME CONTENT */
+        .game-emoji {
+            font-size: 65px;
+        }
 
-    .game-content {
-      position: relative;
+        /* GAME CONTENT */
 
-      display: flex;
-      flex-direction: column;
-      flex: 1;
+        .game-content {
+            padding: 18px 18px 12px;
+            flex: 1;
+        }
 
-      min-height: 0;
-      padding: 15px;
-    }
+        .game-title {
+            font-size: 19px;
+            font-weight: bold;
+            margin-bottom: 8px;
 
-    .game-content h3 {
-      margin: 0 0 8px;
+            overflow-wrap: anywhere;
+        }
 
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
+        .game-category {
+            display: inline-block;
 
-    .category {
-      color: #8fa5ff;
-      font-size: 13px;
-      margin-bottom: 8px;
-    }
+            padding: 4px 10px;
+            margin-bottom: 10px;
 
-    .description {
-      color: #aab2c5;
-      font-size: 14px;
-      line-height: 1.5;
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
 
-      overflow: hidden;
+            border-radius: 20px;
+            font-size: 12px;
+        }
 
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-    }
+        .game-short-description {
+            color: #9ca3af;
+            font-size: 13px;
+            line-height: 1.5;
 
-    /* PLAY BUTTON */
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
 
-    .play-button {
-      display: block;
-      flex-shrink: 0;
+            overflow: hidden;
+        }
 
-      padding: 11px;
-      margin: 0 15px 15px;
+        /* PLAY BUTTON */
 
-      text-align: center;
+        .play-button {
+            display: block;
+            text-align: center;
 
-      background: #5865f2;
-      color: white;
+            margin: 0 18px 18px;
+            padding: 11px 15px;
 
-      text-decoration: none;
-      border-radius: 7px;
+            background: #2563eb;
+            color: white;
 
-      transition: background 0.2s ease;
-    }
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
 
-    .play-button:hover {
-      background: #4752c4;
-    }
+            border-radius: 8px;
 
-    /* DESCRIPTION OVERLAY */
+            transition:
+                background 0.2s,
+                transform 0.2s;
+        }
 
-    .description-overlay {
-      position: absolute;
-      inset: 0;
-      z-index: 3;
+        .play-button:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+        /* EXPANDABLE DESCRIPTION */
 
-      padding: 22px;
+        .description-overlay {
+            position: static;
+            width: 100%;
 
-      background: rgba(12, 16, 29, 0.94);
-      color: white;
+            max-height: 0;
+            padding: 0 18px;
 
-      font-size: 14px;
-      line-height: 1.7;
+            overflow: hidden;
 
-      overflow-y: auto;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
 
-      opacity: 0;
-      visibility: hidden;
+            background: #182334;
+            color: #d1d5db;
 
-      transition:
-        opacity 0.25s ease,
-        visibility 0.25s ease;
-    }
+            border-top: 0 solid #374151;
 
-    .game-card:hover .description-overlay,
-    .game-card:focus-within .description-overlay,
-    .game-card.show-description .description-overlay {
-      opacity: 1;
-      visibility: visible;
-    }
+            transition:
+                max-height 0.35s ease,
+                padding 0.35s ease,
+                opacity 0.25s ease,
+                visibility 0.25s ease,
+                border-width 0.25s ease;
+        }
 
-    /* MESSAGE */
+        .description-overlay h3 {
+            color: #60a5fa;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
 
-    #message {
-      color: #aab2c5;
-      text-align: center;
-      padding: 30px;
-    }
+        .description-overlay p {
+            font-size: 13px;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
 
-    /* FOOTER */
+        /* Expand on hover and keyboard focus */
 
-    footer {
-      text-align: center;
-      padding: 30px;
-      color: #777;
-    }
+        .game-card:hover .description-overlay,
+        .game-card:focus-within .description-overlay,
+        .game-card.show-description .description-overlay {
+            max-height: 180px;
+            padding: 15px 18px 18px;
 
-    footer a {
-      color: #8fa5ff;
-      text-decoration: none;
-    }
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
 
-    /* MOBILE */
+            border-top-width: 1px;
+        }
+
+        /* LOADING / EMPTY / ERROR */
 
-    @media (max-width: 600px) {
-
-      .games {
-        grid-template-columns: repeat(
-          2,
-          minmax(0, 1fr)
-        );
-
-        gap: 12px;
-      }
-
-      .game-card {
-        height: 310px;
-      }
-
-      .game-image {
-        height: 125px;
-      }
-
-      .game-content {
-        padding: 10px;
-      }
-
-      .play-button {
-        margin: 0 10px 10px;
-      }
-
-      .game-card:hover {
-        transform: none;
-      }
-    }
-
-    /* REDUCED MOTION */
-
-    @media (prefers-reduced-motion: reduce) {
-
-      .game-card,
-      .game-image img,
-      .play-button,
-      .description-overlay {
-        transition: none;
-      }
-    }
-
-  </style>
+        .message {
+            text-align: center;
+            padding: 50px 20px;
+            color: #9ca3af;
+            font-size: 15px;
+            grid-column: 1 / -1;
+        }
+
+        /* FOOTER */
+
+        footer {
+            text-align: center;
+            padding: 25px 15px;
+
+            border-top: 1px solid #374151;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        footer a {
+            color: #60a5fa;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* TABLET */
+
+        @media (max-width: 900px) {
+            .games-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 18px;
+            }
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 25px;
+            }
+
+            main {
+                padding: 22px 12px 40px;
+            }
+
+            .games-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 12px;
+            }
+
+            .game-card {
+                min-height: 310px;
+                border-radius: 10px;
+            }
+
+            .game-image {
+                height: 125px;
+            }
+
+            .game-emoji {
+                font-size: 45px;
+            }
+
+            .game-content {
+                padding: 12px 10px 8px;
+            }
+
+            .game-title {
+                font-size: 15px;
+            }
+
+            .game-category {
+                font-size: 10px;
+                padding: 3px 8px;
+            }
+
+            .game-short-description {
+                font-size: 11px;
+            }
+
+            .play-button {
+                margin: 0 10px 12px;
+                padding: 9px 8px;
+                font-size: 12px;
+            }
+
+            .description-overlay {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .game-card.show-description .description-overlay {
+                max-height: 180px;
+                padding: 12px 10px 14px;
+            }
+
+            /* Disable hover expansion on touch devices */
+            .game-card:hover .description-overlay {
+                max-height: 0;
+                padding: 0 10px;
+                opacity: 0;
+                visibility: hidden;
+                border-top-width: 0;
+            }
+
+            .game-card.show-description:hover .description-overlay {
+                max-height: 180px;
+                padding: 12px 10px 14px;
+                opacity: 1;
+                visibility: visible;
+                border-top-width: 1px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-  <!-- HEADER -->
+    <header>
+        <h1>🎮 My Game Arcade</h1>
+        <p>Discover and play amazing games</p>
+    </header>
 
-  <header>
-    <h1>🎮 My Game Arcade</h1>
-    <p>Discover and play my small games</p>
-  </header>
+    <main>
 
-  <!-- MAIN -->
+        <div class="search-container">
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search games..."
+                autocomplete="off"
+            >
+        </div>
 
-  <main>
+        <div class="games-grid" id="gamesGrid">
+            <div class="message">Loading games...</div>
+        </div>
 
-    <div class="toolbar">
-      <input
-        id="search"
-        type="text"
-        placeholder="Search games..."
-      >
-    </div>
+    </main>
 
-    <div id="message">
-      Loading games...
-    </div>
+    <footer>
+        <p>
+            © 2026 My Game Arcade |
+            <a href="./admin.html">Admin</a>
+        </p>
+    </footer>
 
-    <div id="games" class="games"></div>
+    <!-- FIREBASE -->
 
-  </main>
+    <script type="module">
 
-  <!-- FOOTER -->
+        import { firebaseConfig } from "./firebase-config.js";
 
-  <footer>
-    My Game Arcade ·
-    <a href="./admin.html">Admin</a>
-  </footer>
+        import {
+            initializeApp
+        } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 
-  <!-- FIREBASE -->
+        import {
+            getFirestore,
+            collection,
+            query,
+            orderBy,
+            onSnapshot
+        } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-  <script type="module">
 
-    import {
-      initializeApp
-    } from
-      "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+        // Initialize Firebase
 
-    import {
-      getFirestore,
-      collection,
-      query,
-      orderBy,
-      onSnapshot
-    } from
-      "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-    import {
-      firebaseConfig
-    } from "./firebase-config.js";
 
+        // DOM
 
-    // INITIALIZE FIREBASE
+        const gamesGrid = document.getElementById("gamesGrid");
+        const searchInput = document.getElementById("searchInput");
 
-    const app = initializeApp(firebaseConfig);
 
-    const db = getFirestore(app);
+        // Data
 
+        let allGames = [];
 
-    // DOM ELEMENTS
 
-    const gamesElement =
-      document.getElementById("games");
+        // Escape HTML to prevent HTML injection
 
-    const messageElement =
-      document.getElementById("message");
+        function escapeHTML(value) {
 
-    const searchElement =
-      document.getElementById("search");
+            return String(value ?? "").replace(/[&<>"']/g, function(char) {
 
+                const entities = {
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    '"': "&quot;",
+                    "'": "&#039;"
+                };
 
-    // GAME DATA
+                return entities[char];
 
-    let allGames = [];
-
-
-    // ESCAPE HTML
-
-    function escapeHTML(value) {
-
-      return String(value ?? "").replace(
-        /[&<>"']/g,
-        char => ({
-          "&": "&amp;",
-          "<": "&lt;",
-          ">": "&gt;",
-          '"': "&quot;",
-          "'": "&#39;"
-        })[char]
-      );
-
-    }
-
-
-    // VALIDATE GAME URL
-
-    function safeGameURL(value) {
-
-      const url = String(value || "").trim();
-
-      if (/^https:\/\//i.test(url)) {
-        return url;
-      }
-
-      if (
-        /^(?!\/)(?!.*(?:^|\/)\.\.(?:\/|$))[a-zA-Z0-9._/-]+\/?$/.test(url)
-      ) {
-        return url;
-      }
-
-      return "";
-
-    }
-
-
-    // VALIDATE IMAGE URL
-
-    function safeImageURL(value) {
-
-      const url = String(value || "").trim();
-
-      if (/^https:\/\//i.test(url)) {
-        return url;
-      }
-
-      if (
-        /^(?!\/)(?!.*(?:^|\/)\.\.(?:\/|$))[a-zA-Z0-9._/-]+\.(png|jpg|jpeg|webp|gif)$/i.test(url)
-      ) {
-        return url;
-      }
-
-      return "";
-
-    }
-
-
-    // RENDER GAMES
-
-    function renderGames() {
-
-      const keyword =
-        searchElement.value.toLowerCase().trim();
-
-
-      // FILTER GAMES
-
-      const filtered = allGames.filter(game => {
-
-        const content = [
-          game.name,
-          game.category,
-          game.description
-        ].join(" ").toLowerCase();
-
-        return content.includes(keyword);
-
-      });
-
-
-      gamesElement.innerHTML = "";
-
-
-      if (filtered.length === 0) {
-
-        messageElement.textContent = "No games found.";
-
-        return;
-
-      }
-
-
-      messageElement.textContent = "";
-
-
-      // CREATE GAME CARDS
-
-      filtered.forEach(game => {
-
-        const card = document.createElement("div");
-
-        card.className = "game-card";
-
-
-        const imageURL = safeImageURL(game.imageUrl);
-
-        const gameURL = safeGameURL(game.url);
-
-
-        const imageHTML = imageURL
-
-          ? `<img src="${escapeHTML(imageURL)}" alt="">`
-
-          : escapeHTML(game.emoji || "🎮");
-
-
-        card.innerHTML = `
-
-          <div class="game-image">
-
-            ${imageHTML}
-
-          </div>
-
-
-          <div class="game-content">
-
-            <h3 title="${escapeHTML(game.name)}">
-
-              ${escapeHTML(game.name)}
-
-            </h3>
-
-
-            <div class="category">
-
-              ${escapeHTML(game.category)}
-
-            </div>
-
-
-            <p class="description">
-
-              ${escapeHTML(game.description)}
-
-            </p>
-
-          </div>
-
-
-          <div class="description-overlay">
-
-            ${escapeHTML(
-              game.description || "No description available."
-            )}
-
-          </div>
-
-
-          ${
-            gameURL
-
-              ? `
-                <a
-                  class="play-button"
-                  href="${escapeHTML(gameURL)}"
-                >
-                  ▶ Play Now
-                </a>
-              `
-
-              : `
-                <span class="play-button">
-                  Game URL unavailable
-                </span>
-              `
-          }
-
-        `;
-
-
-        // EXTERNAL GAME LINK
-
-        if (gameURL && /^https:\/\//i.test(gameURL)) {
-
-          const link = card.querySelector("a");
-
-          link.target = "_blank";
-
-          link.rel = "noopener noreferrer";
+            });
 
         }
 
 
-        // MOBILE DESCRIPTION TOGGLE
+        // Validate game URL
 
-        card.addEventListener("click", event => {
+        function safeGameURL(url) {
 
-          if (event.target.closest(".play-button")) {
-            return;
-          }
+            if (!url) return "#";
 
-          if (window.matchMedia("(hover: none)").matches) {
+            const value = String(url).trim();
 
-            card.classList.toggle("show-description");
+            try {
 
-          }
+                const parsed = new URL(value, window.location.href);
 
-        });
+                if (
+                    parsed.protocol === "http:" ||
+                    parsed.protocol === "https:"
+                ) {
+                    return escapeHTML(value);
+                }
 
+            } catch (error) {
 
-        gamesElement.appendChild(card);
+                return "#";
 
-      });
+            }
 
-    }
+            return "#";
 
-
-    // SEARCH EVENT
-
-    searchElement.addEventListener(
-      "input",
-      renderGames
-    );
+        }
 
 
-    // LOAD GAMES FROM FIRESTORE
+        // Validate image URL
 
-    const gamesQuery = query(
+        function safeImageURL(url) {
 
-      collection(db, "games"),
+            if (!url) return "";
 
-      orderBy("order", "asc")
+            const value = String(url).trim();
 
-    );
+            try {
+
+                const parsed = new URL(value, window.location.href);
+
+                if (
+                    parsed.protocol === "http:" ||
+                    parsed.protocol === "https:"
+                ) {
+                    return escapeHTML(value);
+                }
+
+                return "";
+
+            } catch (error) {
+
+                return "";
+
+            }
+
+        }
 
 
-    onSnapshot(
+        // Render games
 
-      gamesQuery,
+        function renderGames() {
 
-      snapshot => {
+            const keyword = searchInput.value
+                .trim()
+                .toLowerCase();
 
-        allGames = snapshot.docs.map(doc => doc.data());
+            const filteredGames = allGames.filter(game => {
 
-        renderGames();
+                const name = String(game.name || "").toLowerCase();
+                const category = String(game.category || "").toLowerCase();
+                const description = String(game.description || "").toLowerCase();
 
-      },
+                return (
+                    name.includes(keyword) ||
+                    category.includes(keyword) ||
+                    description.includes(keyword)
+                );
 
-      error => {
+            });
 
-        console.error(error);
 
-        messageElement.textContent =
-          "Cannot load games. Please check your Firebase configuration and Firestore rules.";
+            // Empty state
 
-      }
+            if (filteredGames.length === 0) {
 
-    );
+                gamesGrid.innerHTML = `
+                    <div class="message">
+                        No games found.
+                    </div>
+                `;
 
-  </script>
+                return;
+
+            }
+
+
+            // Generate cards
+
+            gamesGrid.innerHTML = filteredGames.map(game => {
+
+                const name = escapeHTML(game.name || "Untitled Game");
+
+                const category = escapeHTML(game.category || "Other");
+
+                const description = escapeHTML(
+                    game.description || "No description available."
+                );
+
+                const imageURL = safeImageURL(game.imageUrl);
+
+                const gameURL = safeGameURL(game.url);
+
+                const emoji = escapeHTML(game.emoji || "🎮");
+
+
+                // Image or emoji
+
+                const imageHTML = imageURL
+                    ? `
+                        <img
+                            src="${imageURL}"
+                            alt="${name}"
+                            loading="lazy"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                        >
+                        <span class="game-emoji" style="display:none">
+                            ${emoji}
+                        </span>
+                    `
+                    : `
+                        <span class="game-emoji">
+                            ${emoji}
+                        </span>
+                    `;
+
+
+                // External links open in new tab
+
+                let externalAttributes = "";
+
+                if (
+                    gameURL.startsWith("http://") ||
+                    gameURL.startsWith("https://")
+                ) {
+                    externalAttributes = `
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    `;
+                }
+
+
+                return `
+
+                    <div class="game-card">
+
+                        <div class="game-image">
+                            ${imageHTML}
+                        </div>
+
+                        <div class="game-content">
+
+                            <h2 class="game-title">
+                                ${name}
+                            </h2>
+
+                            <span class="game-category">
+                                ${category}
+                            </span>
+
+                            <p class="game-short-description">
+                                ${description}
+                            </p>
+
+                        </div>
+
+                        <a
+                            class="play-button"
+                            href="${gameURL}"
+                            ${externalAttributes}
+                        >
+                            Play Now →
+                        </a>
+
+                        <div class="description-overlay">
+
+                            <h3>About this game</h3>
+
+                            <p>
+                                ${description}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }).join("");
+
+
+            // Mobile: tap card to expand/collapse description
+
+            gamesGrid.querySelectorAll(".game-card").forEach(card => {
+
+                card.addEventListener("click", function(event) {
+
+                    // Do not toggle when clicking Play Now
+
+                    if (event.target.closest("a")) {
+                        return;
+                    }
+
+                    // Only use click toggle on touch devices
+
+                    if (window.matchMedia("(hover: none)").matches) {
+
+                        this.classList.toggle("show-description");
+
+                    }
+
+                });
+
+            });
+
+        }
+
+
+        // Search
+
+        searchInput.addEventListener("input", renderGames);
+
+
+        // Load games from Firestore
+
+        const gamesQuery = query(
+            collection(db, "games"),
+            orderBy("order", "asc")
+        );
+
+
+        onSnapshot(
+            gamesQuery,
+
+            snapshot => {
+
+                allGames = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+
+                renderGames();
+
+            },
+
+            error => {
+
+                console.error("Firestore error:", error);
+
+                gamesGrid.innerHTML = `
+                    <div class="message">
+                        Unable to load games. Please try again later.
+                    </div>
+                `;
+
+            }
+
+        );
+
+    </script>
 
 </body>
 </html>
