@@ -181,6 +181,7 @@
         getFirestore,
         collection,
         getDocs,
+        getDoc,
         addDoc,
         updateDoc,
         deleteDoc,
@@ -287,6 +288,7 @@
 
         try {
           const userDoc = await getDoc(doc(db, "users", user.uid));
+
           const isAdmin = userDoc.exists() && userDoc.data().admin === true;
 
           if (!isAdmin) {
