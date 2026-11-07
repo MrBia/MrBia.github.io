@@ -1,308 +1,167 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Danh sách các game demo của tôi.">
   <title>My Game Arcade</title>
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #0b1020;
-      --panel: #141c30;
-      --panel-hover: #1a2640;
-      --text: #f3f6ff;
-      --muted: #a8b3cc;
-      --accent: #78e3c3;
-      --border: #293650;
-    }
 
+  <style>
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      min-height: 100vh;
-      background:
-        radial-gradient(ellipse at top, rgba(77, 111, 190, .18), transparent 48%),
-        var(--bg);
-      color: var(--text);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-
-    .container {
-      width: min(1100px, calc(100% - 32px));
-      margin: 0 auto;
+      font-family: Arial, sans-serif;
+      background: #10131c;
+      color: #f5f5f5;
     }
 
     header {
-      padding: 64px 0 36px;
+      padding: 35px 20px;
       text-align: center;
+      background: #191f30;
     }
 
-    .eyebrow {
-      display: inline-block;
-      margin-bottom: 14px;
-      padding: 6px 12px;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      color: var(--accent);
-      font-size: .8rem;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-    }
+    header h1 { margin: 0 0 10px; }
+    header p { color: #aab2c5; }
 
-    h1 {
-      margin: 0;
-      font-size: clamp(2.2rem, 6vw, 4rem);
-      letter-spacing: -.04em;
-    }
-
-    .intro {
-      max-width: 580px;
-      margin: 16px auto 0;
-      color: var(--muted);
-      line-height: 1.7;
+    main {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 20px;
     }
 
     .toolbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      margin: 20px 0 22px;
+      margin-bottom: 25px;
     }
 
-    .toolbar h2 {
-      margin: 0;
-      font-size: 1.2rem;
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #343c50;
+      border-radius: 8px;
+      background: #191f30;
+      color: white;
+      font-size: 16px;
     }
 
-    .search {
-      width: min(280px, 100%);
-      padding: 11px 14px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      outline: none;
-      background: var(--panel);
-      color: var(--text);
-      font: inherit;
-    }
-
-    .search:focus { border-color: var(--accent); }
-
-    .grid {
+    .games {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
       gap: 20px;
-      padding-bottom: 56px;
     }
 
     .game-card {
       overflow: hidden;
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      background: var(--panel);
-      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+      background: #191f30;
+      border: 1px solid #293149;
+      border-radius: 12px;
     }
 
-    .game-card:hover {
-      transform: translateY(-4px);
-      border-color: #506789;
-      background: var(--panel-hover);
-    }
-
-    .cover {
-      display: grid;
-      place-items: center;
-      aspect-ratio: 16 / 9;
-      background: linear-gradient(135deg, #253d68, #18243c 65%, #203c45);
-      font-size: 3.5rem;
-    }
-
-    .game-card:nth-child(3n + 2) .cover {
-      background: linear-gradient(135deg, #563c79, #252644 70%, #443052);
-    }
-
-    .game-card:nth-child(3n) .cover {
-      background: linear-gradient(135deg, #286c65, #1c3547 70%, #263252);
-    }
-
-    .card-content { padding: 18px; }
-
-    .card-top {
+    .game-image {
+      height: 150px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 8px;
+      justify-content: center;
+      background: #252e45;
+      font-size: 55px;
     }
 
-    .card-top h3 {
-      margin: 0;
-      font-size: 1.1rem;
+    .game-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
-    .tag {
-      flex-shrink: 0;
-      padding: 4px 8px;
-      border-radius: 999px;
-      background: rgba(120, 227, 195, .12);
-      color: var(--accent);
-      font-size: .72rem;
-    }
-
+    .game-content { padding: 16px; }
+    .game-content h3 { margin: 0 0 8px; }
+    .category { color: #8fa5ff; font-size: 13px; }
     .description {
-      min-height: 48px;
-      margin: 12px 0 18px;
-      color: var(--muted);
-      font-size: .92rem;
-      line-height: 1.55;
+      color: #aab2c5;
+      min-height: 42px;
+      line-height: 1.5;
     }
 
     .play-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      padding: 11px 14px;
-      border: 0;
-      border-radius: 10px;
-      background: var(--accent);
-      color: #0a1c20;
-      font: inherit;
-      font-weight: 700;
+      display: block;
+      padding: 11px;
+      margin-top: 15px;
+      text-align: center;
+      background: #5865f2;
+      color: white;
       text-decoration: none;
-      transition: filter .15s ease;
+      border-radius: 7px;
     }
 
-    .play-button:hover { filter: brightness(1.08); }
+    .play-button:hover { background: #4752c4; }
 
-    .empty {
-      grid-column: 1 / -1;
-      padding: 36px 16px;
-      color: var(--muted);
+    #message {
+      color: #aab2c5;
       text-align: center;
-      border: 1px dashed var(--border);
-      border-radius: 16px;
+      padding: 30px;
     }
 
     footer {
-      padding: 22px 0 32px;
-      border-top: 1px solid var(--border);
-      color: var(--muted);
-      font-size: .85rem;
       text-align: center;
+      padding: 30px;
+      color: #777;
     }
 
-    @media (max-width: 800px) {
-      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      header { padding-top: 48px; }
-    }
+    footer a { color: #8fa5ff; }
 
-    @media (max-width: 540px) {
-      .grid { grid-template-columns: 1fr; }
-      .toolbar { align-items: stretch; flex-direction: column; }
-      .search { width: 100%; }
-      .cover { font-size: 3rem; }
-    }
   </style>
 </head>
+
 <body>
-  <header class="container">
-    <span class="eyebrow">Indie game collection</span>
-    <h1>My Game Arcade <span aria-hidden="true">🎮</span></h1>
-    <p class="intro">
-      Những game demo nhỏ do tôi xây dựng. Chọn một game bên dưới và bắt đầu chơi!
-    </p>
+
+  <header>
+    <h1>🎮 My Game Arcade</h1>
+    <p>Discover and play my small games</p>
   </header>
 
-  <main class="container">
-    <section aria-labelledby="games-heading">
-      <div class="toolbar">
-        <h2 id="games-heading">Danh sách game <span id="game-count"></span></h2>
-        <input
-          class="search"
-          id="search"
-          type="search"
-          placeholder="Tìm game..."
-          aria-label="Tìm game theo tên hoặc mô tả"
-        >
-      </div>
-      <div class="grid" id="game-list"></div>
-    </section>
+  <main>
+    <div class="toolbar">
+      <input
+        id="search"
+        type="text"
+        placeholder="Search games..."
+      >
+    </div>
+
+    <div id="message">Loading games...</div>
+    <div id="games" class="games"></div>
   </main>
 
   <footer>
-    © <span id="year"></span> My Game Arcade · Made with HTML, CSS & JavaScript
+    My Game Arcade · <a href="./admin.html">Admin</a>
   </footer>
 
-  <script>
-    // Thêm, sửa hoặc xóa game trong danh sách này.
-    // Đường dẫn ví dụ tương ứng với thư mục: games/pong/index.html
-    const games = [
-      {
-        name: "Pong",
-        description: "Game bóng bàn cổ điển. Điều khiển thanh đỡ và ghi điểm.",
-        category: "Arcade",
-        icon: "🏓",
-        url: "./games/pong/",
-        status: "Demo"
-      },
-      {
-        name: "Tank Battle",
-        description: "Điều khiển xe tăng, di chuyển trên bản đồ và bắn mục tiêu.",
-        category: "Action",
-        icon: "🚀",
-        url: "./games/tank/",
-        status: "Demo"
-      },
-      {
-        name: "3D World",
-        description: "Khám phá thử nghiệm đồ họa 3D chạy trực tiếp trên trình duyệt.",
-        category: "3D",
-        icon: "🪐",
-        url: "./games/threejs-demo/",
-        status: "Demo"
-      }
-    ];
+  <script type="module">
+    import { initializeApp } from
+      "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 
-    const gameList = document.getElementById("game-list");
-    const searchInput = document.getElementById("search");
-    const gameCount = document.getElementById("game-count");
+    import {
+      getFirestore,
+      collection,
+      query,
+      orderBy,
+      onSnapshot
+    } from
+      "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-    function renderGames(query = "") {
-      const keyword = query.trim().toLowerCase();
-      const filteredGames = games.filter((game) =>
-        `${game.name} ${game.description} ${game.category}`
-          .toLowerCase()
-          .includes(keyword)
-      );
+    import { firebaseConfig } from "./firebase-config.js";
 
-      gameCount.textContent = `(${filteredGames.length})`;
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-      if (filteredGames.length === 0) {
-        gameList.innerHTML = '<p class="empty">Không tìm thấy game phù hợp.</p>';
-        return;
-      }
+    const gamesElement = document.getElementById("games");
+    const messageElement = document.getElementById("message");
+    const searchElement = document.getElementById("search");
 
-      gameList.innerHTML = filteredGames.map((game) => `
-        <article class="game-card">
-          <div class="cover" aria-hidden="true">${game.icon}</div>
-          <div class="card-content">
-            <div class="card-top">
-              <h3>${escapeHTML(game.name)}</h3>
-              <span class="tag">${escapeHTML(game.category)}</span>
-            </div>
-            <p class="description">${escapeHTML(game.description)}</p>
-            <a class="play-button" href="${escapeHTML(game.url)}">
-              Chơi ngay <span aria-hidden="true">&nbsp;↗</span>
-            </a>
-          </div>
-        </article>
-      `).join("");
-    }
+    let allGames = [];
 
     function escapeHTML(value) {
-      return String(value).replace(/[&<>"']/g, (char) => ({
+      return String(value ?? "").replace(/[&<>"']/g, char => ({
         "&": "&amp;",
         "<": "&lt;",
         ">": "&gt;",
@@ -311,12 +170,105 @@
       })[char]);
     }
 
-    searchInput.addEventListener("input", (event) => {
-      renderGames(event.target.value);
-    });
+    function safeGameURL(value) {
+      const url = String(value || "").trim();
 
-    document.getElementById("year").textContent = new Date().getFullYear();
-    renderGames();
+      if (/^https:\/\//i.test(url)) return url;
+
+      if (
+        /^(?!\/)(?!.*(?:^|\/)\.\.(?:\/|$))[a-zA-Z0-9._/-]+\/?$/.test(url)
+      ) {
+        return url;
+      }
+
+      return "";
+    }
+
+    function safeImageURL(value) {
+      const url = String(value || "").trim();
+
+      if (/^https:\/\//i.test(url)) return url;
+
+      if (
+        /^(?!\/)(?!.*(?:^|\/)\.\.(?:\/|$))[a-zA-Z0-9._/-]+\.(png|jpg|jpeg|webp|gif)$/i.test(url)
+      ) {
+        return url;
+      }
+
+      return "";
+    }
+
+    function renderGames() {
+      const keyword = searchElement.value.toLowerCase().trim();
+
+      const filtered = allGames.filter(game => {
+        const content = [
+          game.name,
+          game.category,
+          game.description
+        ].join(" ").toLowerCase();
+
+        return content.includes(keyword);
+      });
+
+      gamesElement.innerHTML = "";
+
+      if (filtered.length === 0) {
+        messageElement.textContent = "No games found.";
+        return;
+      }
+
+      messageElement.textContent = "";
+
+      filtered.forEach(game => {
+        const card = document.createElement("div");
+        card.className = "game-card";
+
+        const imageURL = safeImageURL(game.imageUrl);
+        const gameURL = safeGameURL(game.url);
+
+        const imageHTML = imageURL
+          ? `<img src="${escapeHTML(imageURL)}" alt="">`
+          : escapeHTML(game.emoji || "🎮");
+
+        card.innerHTML = `
+          <div class="game-image">${imageHTML}</div>
+          <div class="game-content">
+            <h3>${escapeHTML(game.name)}</h3>
+            <div class="category">${escapeHTML(game.category)}</div>
+            <p class="description">${escapeHTML(game.description)}</p>
+            ${gameURL
+              ? `<a class="play-button" href="${escapeHTML(gameURL)}">▶ Play Now</a>`
+              : `<span class="play-button">Game URL unavailable</span>`
+            }
+          </div>
+        `;
+
+        if (gameURL && /^https:\/\//i.test(gameURL)) {
+          card.querySelector("a")?.setAttribute("target", "_blank");
+          card.querySelector("a")?.setAttribute("rel", "noopener noreferrer");
+        }
+
+        gamesElement.appendChild(card);
+      });
+    }
+
+    searchElement.addEventListener("input", renderGames);
+
+    const gamesQuery = query(
+      collection(db, "games"),
+      orderBy("order", "asc")
+    );
+
+    onSnapshot(gamesQuery, snapshot => {
+      allGames = snapshot.docs.map(doc => doc.data());
+      renderGames();
+    }, error => {
+      console.error(error);
+      messageElement.textContent =
+        "Cannot load games. Please check your Firebase configuration and Firestore rules.";
+    });
   </script>
+
 </body>
 </html>

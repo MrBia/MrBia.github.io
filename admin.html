@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game Admin</title>
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 25px;
+        background: #10131c;
+        color: white;
+        font-family: Arial, sans-serif;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: auto;
+      }
+
+      .panel {
+        padding: 22px;
+        margin-bottom: 22px;
+        background: #191f30;
+        border: 1px solid #293149;
+        border-radius: 10px;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 12px;
+        margin: 7px 0 14px;
+        border: 1px solid #343c50;
+        border-radius: 7px;
+        background: #10131c;
+        color: white;
+      }
+
+      textarea {
+        min-height: 75px;
+      }
+
+      button {
+        padding: 10px 16px;
+        border: 0;
+        border-radius: 6px;
+        cursor: pointer;
+        background: #5865f2;
+        color: white;
+      }
+
+      button:hover {
+        opacity: 0.85;
+      }
+
+      button.danger {
+        background: #d94c5c;
+      }
+      button.secondary {
+        background: #555d70;
+      }
+
+      .game-item {
+        padding: 15px 0;
+        border-bottom: 1px solid #343c50;
+      }
+
+      .game-item:last-child {
+        border-bottom: none;
+      }
+
+      .game-item p {
+        color: #aab2c5;
+      }
+
+      .actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      #status {
+        color: #8fa5ff;
+      }
+      #adminPanel {
+        display: none;
+      }
+
+      a {
+        color: #8fa5ff;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>🎮 Game Admin</h1>
+      <p><a href="./index.html">← Back to website</a></p>
+
+      <section id="loginPanel" class="panel">
+        <h2>Admin Login</h2>
+
+        <form id="loginForm">
+          <input id="email" type="email" placeholder="Email" required />
+
+          <input
+            id="password"
+            type="password"
+            placeholder="Password"
+            required
+          />
+
+          <button type="submit">Login</button>
+        </form>
+      </section>
+
+      <section id="adminPanel">
+        <div class="panel">
+          <h2>Game Management</h2>
+          <button id="logoutButton" class="secondary">Logout</button>
+          <p id="status"></p>
+        </div>
+
+        <div class="panel">
+          <h2 id="formTitle">Add New Game</h2>
+
+          <form id="gameForm">
+            <input id="gameId" type="hidden" />
+
+            <label>Game Name</label>
+            <input id="name" required />
+
+            <label>Category</label>
+            <input id="category" placeholder="Arcade, Puzzle, Action..." />
+
+            <label>Description</label>
+            <textarea id="description"></textarea>
+
+            <label>Game URL</label>
+            <input
+              id="url"
+              placeholder="./games/pong/ or https://..."
+              required
+            />
+
+            <label>Emoji</label>
+            <input id="emoji" placeholder="🎮" />
+
+            <label>Image URL</label>
+            <input
+              id="imageUrl"
+              placeholder="./images/pong.png or https://..."
+            />
+
+            <label>Order</label>
+            <input id="order" type="number" value="1" />
+
+            <button type="submit">Save Game</button>
+            <button type="button" id="cancelButton" class="secondary">
+              Cancel
+            </button>
+          </form>
+        </div>
+
+        <div class="panel">
+          <h2>Game List</h2>
+          <div id="gameList">Loading...</div>
+        </div>
+      </section>
+    </div>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+      import {
+        getFirestore,
+        collection,
+        getDocs,
+        addDoc,
+        updateDoc,
+        deleteDoc,
+        doc,
+        query,
+        orderBy,
+      } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+      import {
+        getAuth,
+        signInWithEmailAndPassword,
+        onAuthStateChanged,
+        signOut,
+      } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+      import { firebaseConfig } from "./firebase-config.js";
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+      const auth = getAuth(app);
+
+      const loginPanel = document.getElementById("loginPanel");
+      const adminPanel = document.getElementById("adminPanel");
+      const statusElement = document.getElementById("status");
+      const gameList = document.getElementById("gameList");
+      const gameForm = document.getElementById("gameForm");
+
+      const gamesCollection = collection(db, "games");
+
+      function showStatus(message) {
+        statusElement.textContent = message;
+      }
+
+      function safeGameURL(value) {
+        const url = String(value || "").trim();
+
+        if (/^https:\/\//i.test(url)) return url;
+
+        if (/^(?!\/)(?!.*(?:^|\/)\.\.(?:\/|$))[a-zA-Z0-9._/-]+\/?$/.test(url)) {
+          return url;
+        }
+
+        return "";
+      }
+
+      function safeImageURL(value) {
+        const url = String(value || "").trim();
+
+        if (/^https:\/\//i.test(url)) return url;
+
+        if (
+          /^(?!\/)(?!.*(?:^|\/)\.\.(?:\/|$))[a-zA-Z0-9._/-]+\.(png|jpg|jpeg|webp|gif)$/i.test(
+            url,
+          )
+        ) {
+          return url;
+        }
+
+        return "";
+      }
+
+      function escapeHTML(value) {
+        return String(value ?? "").replace(
+          /[&<>"']/g,
+          (char) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[char],
+        );
+      }
+
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          try {
+            await signInWithEmailAndPassword(
+              auth,
+              document.getElementById("email").value,
+              document.getElementById("password").value,
+            );
+          } catch (error) {
+            alert("Login failed: " + error.message);
+          }
+        });
+
+      document
+        .getElementById("logoutButton")
+        .addEventListener("click", () => signOut(auth));
+
+      onAuthStateChanged(auth, async (user) => {
+        loginPanel.style.display = "none";
+        adminPanel.style.display = "none";
+
+        if (!user) {
+          loginPanel.style.display = "block";
+          return;
+        }
+
+        try {
+          const userDoc = await getDoc(doc(db, "users", user.uid));
+          const isAdmin = userDoc.exists() && userDoc.data().admin === true;
+
+          if (!isAdmin) {
+            await signOut(auth);
+            loginPanel.style.display = "block";
+            alert("Your account does not have admin permission.");
+            return;
+          }
+
+          adminPanel.style.display = "block";
+          await loadGames();
+        } catch (error) {
+          console.error(error);
+          alert("Cannot verify admin permission: " + error.message);
+          await signOut(auth);
+        }
+      });
+
+      async function loadGames() {
+        try {
+          const q = query(gamesCollection, orderBy("order", "asc"));
+          const snapshot = await getDocs(q);
+
+          gameList.innerHTML = "";
+
+          if (snapshot.empty) {
+            gameList.textContent = "No games yet.";
+            return;
+          }
+
+          snapshot.forEach((item) => {
+            const game = item.data();
+
+            const div = document.createElement("div");
+            div.className = "game-item";
+
+            div.innerHTML = `
+          <h3>${escapeHTML(game.emoji || "🎮")} ${escapeHTML(game.name)}</h3>
+          <p>${escapeHTML(game.category || "")}</p>
+          <p>${escapeHTML(game.description || "")}</p>
+          <div class="actions">
+            <button class="edit-button">Edit</button>
+            <button class="delete-button danger">Delete</button>
+          </div>
+        `;
+
+            div
+              .querySelector(".edit-button")
+              .addEventListener("click", () => editGame(item.id, game));
+
+            div
+              .querySelector(".delete-button")
+              .addEventListener("click", () => removeGame(item.id));
+
+            gameList.appendChild(div);
+          });
+        } catch (error) {
+          console.error(error);
+          gameList.textContent = "Cannot load games: " + error.message;
+        }
+      }
+
+      function editGame(id, game) {
+        document.getElementById("gameId").value = id;
+        document.getElementById("name").value = game.name || "";
+        document.getElementById("category").value = game.category || "";
+        document.getElementById("description").value = game.description || "";
+        document.getElementById("url").value = game.url || "";
+        document.getElementById("emoji").value = game.emoji || "";
+        document.getElementById("imageUrl").value = game.imageUrl || "";
+        document.getElementById("order").value = game.order ?? 1;
+
+        document.getElementById("formTitle").textContent = "Edit Game";
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function resetForm() {
+        gameForm.reset();
+        document.getElementById("gameId").value = "";
+        document.getElementById("order").value = 1;
+        document.getElementById("formTitle").textContent = "Add New Game";
+      }
+
+      document
+        .getElementById("cancelButton")
+        .addEventListener("click", resetForm);
+
+      gameForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const id = document.getElementById("gameId").value;
+
+        const url = safeGameURL(document.getElementById("url").value);
+
+        const rawImage = document.getElementById("imageUrl").value.trim();
+        const imageUrl = rawImage ? safeImageURL(rawImage) : "";
+
+        if (!url) {
+          alert("Game URL must be a relative path or HTTPS URL.");
+          return;
+        }
+
+        if (rawImage && !imageUrl) {
+          alert("Image URL must be a valid relative image path or HTTPS URL.");
+          return;
+        }
+
+        const game = {
+          name: document.getElementById("name").value.trim(),
+          category: document.getElementById("category").value.trim(),
+          description: document.getElementById("description").value.trim(),
+          url,
+          emoji: document.getElementById("emoji").value.trim() || "🎮",
+          imageUrl,
+          order: Number(document.getElementById("order").value) || 1,
+        };
+
+        if (!game.name) {
+          alert("Game name is required.");
+          return;
+        }
+
+        try {
+          if (id) {
+            await updateDoc(doc(db, "games", id), game);
+            showStatus("Game updated successfully.");
+          } else {
+            await addDoc(gamesCollection, game);
+            showStatus("Game added successfully.");
+          }
+
+          resetForm();
+          await loadGames();
+        } catch (error) {
+          console.error(error);
+          showStatus("Error: " + error.message);
+        }
+      });
+
+      async function removeGame(id) {
+        if (!confirm("Are you sure you want to delete this game?")) {
+          return;
+        }
+
+        try {
+          await deleteDoc(doc(db, "games", id));
+          showStatus("Game deleted successfully.");
+          await loadGames();
+        } catch (error) {
+          console.error(error);
+          showStatus("Error: " + error.message);
+        }
+      }
+    </script>
+  </body>
+</html>
